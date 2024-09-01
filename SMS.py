@@ -418,25 +418,23 @@ class StudentManagementSystem:
         if course_name is not None:
             course_found.course_name = course_name
 
-    def enroll_students(self, student_id: str, course_id: List[str]) -> None:
+    def enroll_student(self, student_id: str, course_id: str) -> None:
         """
-        Enrolls a student in one or more courses.
+        Enrolls a student in a course.
 
         This method first finds the student by their ID using the `find_student` method. 
-        Then, for each course ID in the provided list, it finds the corresponding course 
-        using the `find_course` method and creates an `Enrollment` instance for each 
-        student-course pair. The created enrollment instances are then added to the list 
-        of enrollments.
+        Then, finds the corresponding course using the `find_course` method 
+        and creates an `Enrollment` instance.
+        The created enrollment instance is then added to the list of enrollments.
 
         Args:
             student_id (str): The ID of the student to be enrolled.
-            course_id (List[str]): A list of course IDs in which the student should be enrolled.
+            course_id (str): The course ID in which the student should be enrolled.
         """
         student_found = self.find_student(student_id)
-        for crs in course_id:
-            course_found = self.find_course(crs)
-            enrol_obj = Enrollment(student_found, course_found)
-            self.enrollments.append(enrol_obj)
+        course_found = self.find_course(crs)
+        enrol_obj = Enrollment(student_found, course_found)
+        self.enrollments.append(enrol_obj)
 
     def find_enrollment(self, course_id: str, student_id: str) -> Enrollment:
         """
@@ -454,7 +452,7 @@ class StudentManagementSystem:
                 return enrol
         raise ValueError(f'StudentID {student_id} is not enrolled in courseID {course_id}')
 
-    def assign_grades(self, course_id: str, student_id: str, grade: str) -> None:
+    def assign_grade(self, course_id: str, student_id: str, grade: str) -> None:
         """
         Assigns a grade to a student for a specific course.
 

@@ -432,7 +432,7 @@ class StudentManagementSystem:
             course_id (str): The course ID in which the student should be enrolled.
         """
         student_found = self.find_student(student_id)
-        course_found = self.find_course(crs)
+        course_found = self.find_course(course_id)
         enrol_obj = Enrollment(student_found, course_found)
         self.enrollments.append(enrol_obj)
 

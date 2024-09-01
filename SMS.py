@@ -35,10 +35,17 @@ class Student(Person):
         self.courses: Dict[Course, Optional[str]] = {}
         
 
-    def add_course(self, enrol: 'Enrollment'):
+    def add_course(self, enrol: 'Enrollment') -> None:
         """
-        This method adds course(s) a student is enrolled in from Enrollment class when
-        it is initialized
+        Adds the course a student is enrolled in to the student's course list.
+
+        This method is called from the Enrollment class when an enrollment is initialized.
+        If the student's ID matches the enrollment's student ID, the course is added to 
+        the student's list of courses with the corresponding grade.
+
+        Args:
+            enrol (Enrollment): An instance of the Enrollment class, which includes 
+            the student, course, and grade information.
         """
         if self.id_number == enrol.student.id_number:
             self.courses[enrol.course] = enrol.grade
@@ -74,7 +81,6 @@ class Instructor(Person):
         A string representation of an Instructor's details
         """
         return f"{'ID:':>12} {self.id_number}\n{'Name:':>12} {self.name}\n{'Department:':>12} {self.department}"
-        # return f"ID: {self.id_number} Name: {self.name} Department: {self.department}"
     
 
 class Course:
@@ -95,7 +101,12 @@ class Course:
 
     def enrollment(self, enrol: "Enrollment") -> None:
         """
-        This method adds a student enrolled in the Course when Enrollment class is initialized.
+        Adds a student to the course's list of enrolled students if the course 
+        in the Enrollment matches this course.
+        
+        Args:
+            enrol (Enrollment): An instance of the Enrollment class containing 
+            the student and course information.
         """
         if self.course_name == enrol.course.course_name:
             self.enrolled_students.append(enrol.student)

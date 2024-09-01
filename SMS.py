@@ -264,7 +264,7 @@ class StudentManagementSystem:
         for std in self.students:
             if std.id_number == student_id:
                 return std
-        return None
+        raise ValueError(f'No student record found for ID: {student_id}')
 
     def remove_student(self, student_id: str) -> None:
         """

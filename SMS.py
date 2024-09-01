@@ -250,7 +250,7 @@ class StudentManagementSystem:
         if student not in self.students:
             self.students.append(student)
 
-    def find_student(self, student_id: str) -> Optional[Student]:
+    def find_student(self, student_id: str) -> Student:
         """
         Finds and returns a student by their ID number.
 
@@ -278,8 +278,7 @@ class StudentManagementSystem:
             student_id (str): The ID number of the student to be removed.
         """
         std = self.find_student(student_id)
-        if std:
-            self.students.remove(std)
+        self.students.remove(std)
 
     def update_student(self, student_id: str, name: Optional[str] = None, major: Optional[str] = None) -> None:
         """
@@ -295,12 +294,10 @@ class StudentManagementSystem:
             major (Optional[str]): The new major for the student, if provided.
         """
         student_found = self.find_student(student_id)
-        if student_found:
-            if name is not None:
-                student_found.name = name
-            if major is not None:
-                student_found.major = major
-        return None
+        if name is not None:
+            student_found.name = name
+        if major is not None:
+            student_found.major = major
     
     def add_instructor(self, instructor: Instructor) -> None:
         """
@@ -315,7 +312,7 @@ class StudentManagementSystem:
         if instructor not in self.instructors:
             self.instructors.append(instructor)
 
-    def find_instructor(self, instructor_id: str) -> Optional[Instructor]:
+    def find_instructor(self, instructor_id: str) -> Instructor:
         """
         Finds and returns an instructor by their ID number.
 
@@ -329,7 +326,7 @@ class StudentManagementSystem:
         for inst in self.instructors:
             if inst.id_number == instructor_id:
                 return inst        
-        return None
+        raise ValueError(f'No instructor record found for ID: {instructor_id}')
 
     def remove_instructor(self, instructor_id: str) -> None:
         """
@@ -343,8 +340,7 @@ class StudentManagementSystem:
             instructor_id (str): The ID number of the instructor to be removed.
         """
         inst_obj = self.find_instructor(instructor_id)
-        if inst_obj:
-            self.instructors.remove(inst_obj)
+        self.instructors.remove(inst_obj)
 
     def update_instructor(self, instructor_id: str, name: Optional[str]=None, department: Optional[str]=None) -> None:
         """
@@ -360,12 +356,10 @@ class StudentManagementSystem:
             department (Optional[str]): The new department for the instructor, if provided.
         """
         instructor_found = self.find_instructor(instructor_id)
-        if instructor_found:
-            if name is not None:
-                instructor_found.name = name
-            if department is not None:
-                instructor_found.department = department
-        return None
+        if name is not None:
+            instructor_found.name = name
+        if department is not None:
+            instructor_found.department = department
     
     def add_course(self, course: Course) -> None:
         """
@@ -380,7 +374,7 @@ class StudentManagementSystem:
         if course not in self.courses:
             self.courses.append(course)
 
-    def find_course(self, course_id: str) -> Optional[Course]:
+    def find_course(self, course_id: str) -> Course:
         """
         Finds a course in the system by its course ID.
 
@@ -394,7 +388,8 @@ class StudentManagementSystem:
         for crs in self.courses:
             if crs.course_id == course_id:
                 return crs        
-        return None
+        raise ValueError(f'No course record found for ID: {course_id}')
+
         
     def remove_course(self, course_id: str) -> None:
         """
@@ -407,8 +402,7 @@ class StudentManagementSystem:
             course_id (str): The ID of the course to be removed.
         """
         course_found = self.find_course(course_id)
-        if course_found:
-            self.courses.remove(course_found)
+        self.courses.remove(course_found)
 
     def update_course(self, course_id: str, course_name: Optional[str]=None) -> None:
         """
@@ -421,10 +415,8 @@ class StudentManagementSystem:
             course_id (str): The ID of the course to be removed.
         """
         course_found = self.find_course(course_id)
-        if course_found:
-            if course_name is not None:
-                course_found.course_name = course_name
-        return None
+        if course_name is not None:
+            course_found.course_name = course_name
 
     def enroll_students(self, student_id: str, course_id: List[str]) -> None:
         """
@@ -446,7 +438,7 @@ class StudentManagementSystem:
             enrol_obj = Enrollment(student_found, course_found)
             self.enrollments.append(enrol_obj)
 
-    def find_enrollment(self, course_id: str, student_id: str) -> Optional[Enrollment]:
+    def find_enrollment(self, course_id: str, student_id: str) -> Enrollment:
         """
         Finds an enrollment record for a specific student in a specific course.
 
@@ -460,9 +452,9 @@ class StudentManagementSystem:
         for enrol in self.enrollments:
             if (enrol.student.id_number == student_id) and (enrol.course.course_id == course_id):
                 return enrol
-        return None
+        raise ValueError(f'StudentID {student_id} is not enrolled in courseID {course_id}')
 
-    def assign_grades(self, course_id: str, student_id: str, grade: str):
+    def assign_grades(self, course_id: str, student_id: str, grade: str) -> None:
         """
         Assigns a grade to a student for a specific course.
 
@@ -476,12 +468,7 @@ class StudentManagementSystem:
             grade (str): The grade to be assigned.
         """
         enrollment_found = self.find_enrollment(course_id, student_id)
-        if enrollment_found:
-            enrollment_found.assign_grade(grade)
-
-        else:
-            raise ValueError(f"No enrollment found for student ID {student_id} in course {course_id}.\n" 
-                             f"Cannot assign grade to student not enrolled in course {course_id}")
+        enrollment_found.assign_grade(grade)
 
     def students_in_course(self, course_id: str) -> List[Student]:
         """
@@ -495,8 +482,7 @@ class StudentManagementSystem:
             course_id (str): The ID of the course for which to retrieve the enrolled students.
         """
         course_found = self.find_course(course_id)
-        if course_found:
-            return course_found.enrolled_students
+        return course_found.enrolled_students
     
     def student_courses(self, student_id: str) -> List[Course]:
         """
@@ -510,8 +496,7 @@ class StudentManagementSystem:
             student_id (str): The ID of the student for whom to retrieve the enrolled courses.
         """
         student_found = self.find_student(student_id)
-        if student_found:
-            return list(student_found.courses.keys())
+        return list(student_found.courses.keys())
         
 
 

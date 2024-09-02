@@ -108,7 +108,7 @@ class Course:
             enrol (Enrollment): An instance of the Enrollment class containing 
             the student and course information.
         """
-        if self.course_name == enrol.course.course_name:
+        if self.course_id == enrol.course.course_id:
             self.enrolled_students.append(enrol.student)
 
     def add_student(self, student: Student) -> None:
